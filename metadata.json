@@ -1,0 +1,8 @@
+{
+  "name": "Club Management System",
+  "description": "A professional club management system with admin approval, key management, and group features.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}

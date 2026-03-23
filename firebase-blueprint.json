@@ -1,0 +1,108 @@
+{
+  "entities": {
+    "UserData": {
+      "title": "User Data",
+      "description": "Information about club members",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "description": "Full name" },
+        "role": { "type": "string", "description": "Club role or designation" },
+        "fatherName": { "type": "string", "description": "Father's name" },
+        "motherName": { "type": "string", "description": "Mother's name" },
+        "session": { "type": "string", "description": "Academic session" },
+        "department": { "type": "string", "description": "Department name" },
+        "idNumber": { "type": "string", "description": "Unique ID number" },
+        "photoUrl": { "type": "string", "description": "URL of the profile photo" },
+        "status": { "type": "string", "enum": ["pending", "approved", "rejected"], "description": "Approval status" },
+        "createdAt": { "type": "number", "description": "Timestamp of registration" }
+      },
+      "required": ["name", "role", "idNumber", "status"]
+    },
+    "KeyLog": {
+      "title": "Key Log",
+      "description": "Logs of key access requests",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "ID of the user" },
+        "userRole": { "type": "string", "description": "Role of the user" },
+        "userIdNumber": { "type": "string", "description": "ID number of the user" },
+        "paski": { "type": "string", "description": "Generated passkey" },
+        "timestamp": { "type": "number", "description": "Timestamp of generation" }
+      },
+      "required": ["userId", "paski", "timestamp"]
+    },
+    "Notice": {
+      "title": "Notice",
+      "description": "Club notices",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "description": "Notice title" },
+        "content": { "type": "string", "description": "Notice content" },
+        "imageUrl": { "type": "string", "description": "Optional image URL" },
+        "timestamp": { "type": "number", "description": "Timestamp of publication" }
+      },
+      "required": ["title", "content", "timestamp"]
+    },
+    "Comment": {
+      "title": "Comment",
+      "description": "User comments on notices",
+      "type": "object",
+      "properties": {
+        "noticeId": { "type": "string", "description": "ID of the notice" },
+        "userId": { "type": "string", "description": "ID of the user" },
+        "userName": { "type": "string", "description": "Name of the user" },
+        "userIdNumber": { "type": "string", "description": "ID number of the user" },
+        "text": { "type": "string", "description": "Comment text" },
+        "timestamp": { "type": "number", "description": "Timestamp of comment" }
+      },
+      "required": ["noticeId", "userId", "text", "timestamp"]
+    },
+    "UpdateRequest": {
+      "title": "Update Request",
+      "description": "Requests to update user information",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "ID of the user" },
+        "requestedChanges": { "type": "object", "description": "Partial user data changes" },
+        "status": { "type": "string", "enum": ["pending", "approved", "rejected"], "description": "Request status" },
+        "timestamp": { "type": "number", "description": "Timestamp of request" }
+      },
+      "required": ["userId", "requestedChanges", "status", "timestamp"]
+    },
+    "Group": {
+      "title": "Group",
+      "description": "User groups for private chatting",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "description": "Group name" },
+        "memberIds": { "type": "array", "items": { "type": "string" }, "description": "List of member IDs" },
+        "createdAt": { "type": "number", "description": "Timestamp of creation" }
+      },
+      "required": ["name", "memberIds", "createdAt"]
+    },
+    "Message": {
+      "title": "Message",
+      "description": "Messages within a group",
+      "type": "object",
+      "properties": {
+        "groupId": { "type": "string", "description": "ID of the group" },
+        "senderId": { "type": "string", "description": "ID of the sender" },
+        "senderName": { "type": "string", "description": "Name of the sender" },
+        "text": { "type": "string", "description": "Message text" },
+        "mediaUrl": { "type": "string", "description": "Optional media URL" },
+        "mediaType": { "type": "string", "enum": ["image", "video"], "description": "Type of media" },
+        "timestamp": { "type": "number", "description": "Timestamp of message" }
+      },
+      "required": ["groupId", "senderId", "timestamp"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": { "schema": "UserData", "description": "User profiles" },
+    "/keyLogs/{logId}": { "schema": "KeyLog", "description": "Key access logs" },
+    "/notices/{noticeId}": { "schema": "Notice", "description": "Club notices" },
+    "/comments/{commentId}": { "schema": "Comment", "description": "User comments" },
+    "/updateRequests/{requestId}": { "schema": "UpdateRequest", "description": "User info update requests" },
+    "/groups/{groupId}": { "schema": "Group", "description": "Chat groups" },
+    "/groups/{groupId}/messages/{messageId}": { "schema": "Message", "description": "Group messages" }
+  }
+}
